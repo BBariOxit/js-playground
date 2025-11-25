@@ -55,7 +55,7 @@ body>div {
 .tab-item:hover {
     opacity: 1;
     background-color: rgba(194, 53, 100, 0.05);
-    border-color: rgba(165, 34, 78, 0.1);
+    border-color: rgba(194, 53, 100, 0.1);
 }
 
 .tab-item.active {
