@@ -87,10 +87,12 @@
             rules: [
               Validator.isRequired('#fullname'),  
               Validator.isEmail('#email'),
+              Validator.isRequired('#email'),
               Validator.minLength('#password', 8),
               Validator.isConfirmed('#password_confirmation', function() {
-                return 'alo'
-              })
+                return document.querySelector('#form-1 #password').value
+              }, 'mật khẩu nhập lại không chính xác'),
+              Validator.isRequired('#password_confirmation'),
             ]
         })
     </script>

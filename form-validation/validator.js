@@ -1,8 +1,20 @@
 function Validator(options) {
+
+    var selectorRules = {}
+
     //hàm thực hiện validate
     function Validate(inputElement, rule) {
         var errorElement = inputElement.parentElement.querySelector(options.errorSelector)
-        var errorMessage = rule.test(inputElement.value)
+        var errorMessage
+
+        //lấy ra các rule của selector
+        var rules = selectorRules[rule.selector]
+        //lặp qua từng rule & kiểm tra
+        for (var i =0; i < rules.length; i++) {
+            errorMessage = rules[i](inputElement.value)
+            if(errorMessage) break
+        }
+
         if (errorMessage) {
             errorElement.innerText = errorMessage
                 inputElement.parentElement.classList.add('invalid')
@@ -17,6 +29,13 @@ function Validator(options) {
 
     if (formElement) {
         options.rules.forEach(rule => {
+            //lưu lại các rule cho mỗi input
+            if (Array.isArray(selectorRules[rule.selector])) {
+                selectorRules[rule.selector].push(rule.test)
+            } else {
+                selectorRules[rule.selector] = [rule.test]
+            }
+
             var inputElement = formElement.querySelector(rule.selector)
             if (inputElement) {
                 //xử lý blur khỏi input
@@ -32,7 +51,7 @@ function Validator(options) {
                 }
             }
         });
-        
+        console.log(selectorRules)
     }
 }
 
