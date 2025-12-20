@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+
+
+
+        function PostItem({
+            image,
+            title,
+            description,
+            publishedAt,
+        }) {
+            // if (typeof props.callBack === 'function') {
+            //     props.callBack(Math.random())
+            // }
+
+            return (
+                <div className="post-item">
+                    <img
+                        src={image}
+                        alt={title}
+                    />
+                    <h2 className="post-title">{title}</h2>
+                    <p className="post-desc">{description}</p>
+                    <p className="post-published">{publishedAt}</p>
+                </div>
+            )
+        }
+
+        function App() {
+            return (
+                <div className="wrapper">
+                    <PostItem
+                        title='1 C# (.NET) - Từ cơ bản đến nâng cao'
+                        image='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpgXV83U-cLF2i2RMfDYEp5qWGZPk-Gt4J_w&s'
+                        description='1 Học cách xây dựng ứng dụng desktop và web với nền tảng .NET hiện đại, đi kèm ví dụ thực tế và bài tập thực hành.'
+                        publishedAt='1 Đăng ngày 12/12/2025'
+                    // callBack = {(random) => {
+                    //     console.log(random);
+
+                    // }}
+                    />
+                    <PostItem
+                        title='2 C# (.NET) - Từ cơ bản đến nâng cao'
+                        image='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpgXV83U-cLF2i2RMfDYEp5qWGZPk-Gt4J_w&s'
+                        description='2 Học cách xây dựng ứng dụng desktop và web với nền tảng .NET hiện đại, đi kèm ví dụ thực tế và bài tập thực hành.'
+                        publishedAt='2 Đăng ngày 12/12/2025'
+                    />
+                    <PostItem
+                        title='3 C# (.NET) - Từ cơ bản đến nâng cao'
+                        image='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpgXV83U-cLF2i2RMfDYEp5qWGZPk-Gt4J_w&s'
+                        description='3 Học cách xây dựng ứng dụng desktop và web với nền tảng .NET hiện đại, đi kèm ví dụ thực tế và bài tập thực hành.'
+                        publishedAt='3 Đăng ngày 12/12/2025'
+                    />
+                </div>
+            )
+        }
+
+        // render
+        const container = document.querySelector('#app')
+        const root = ReactDOM.createRoot(container)
+        root.render(<App />)
+    </script>
+</body>
+
+</html>
