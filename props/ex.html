@@ -198,7 +198,7 @@
 
         const CourseItem = ({course}) => (
             <div>
-                <h2>{course.title}</h2>
+                <h2 onClick = {() => alert('alo') }>{course.title}</h2>
                 <img src = {course.thumbnail}/>
                 <p>{course.description}</p>
                 <p>{course.students_count}</p>
