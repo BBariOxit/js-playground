@@ -13,7 +13,7 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const course = [
+        const courses = [
             { // render title, description, students_count, thumbnail_cdn
                 "id": 2,
                 "category_id": 2,
@@ -196,10 +196,27 @@
             }
         ];
 
+        const CourseItem = props => (
+            <div>
+                <h2>{props.title}</h2>
+                <img src = {props.image}/>
+                <p>{props.description}</p>
+                <p>{props.studentCount}</p>
+            </div>
+        )
+
         function App() {
             return (
                 <div id = 'wrapper'>
-                    <h1>hello</h1>    
+                    {courses.map(course => (
+                        <CourseItem 
+                            key = {course.id}
+                            title = {course.title}
+                            image = {course.image}
+                            description = {course.description}
+                            studentCount = {course.students_count}
+                        />
+                    ))}
                 </div>
             )
         }
