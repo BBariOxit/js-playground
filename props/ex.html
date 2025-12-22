@@ -196,9 +196,9 @@
             }
         ];
 
-        const CourseItem = ({course}) => (
+        const CourseItem = ({course, onClick}) => (
             <div>
-                <h2 onClick = {() => alert(course.title) }>{course.title}</h2>
+                <h2 onClick = {() => onClick(course)}>{course.title}</h2>
                 <img src = {course.thumbnail}/>
                 <p>{course.description}</p>
                 <p>{course.students_count}</p>
@@ -208,7 +208,7 @@
 
         function App() {
 
-            const handleClick= () => {
+            const handleClick= (course) => {
                 alert(course.title)
             }
 
