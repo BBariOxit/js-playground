@@ -196,12 +196,13 @@
             }
         ];
 
-        const CourseItem = props => (
+        const CourseItem = ({course}) => (
             <div>
-                <h2>{props.title}</h2>
-                <img src = {props.image}/>
-                <p>{props.description}</p>
-                <p>{props.studentCount}</p>
+                <h2>{course.title}</h2>
+                <img src = {course.thumbnail}/>
+                <p>{course.description}</p>
+                <p>{course.students_count}</p>
+
             </div>
         )
 
@@ -211,10 +212,11 @@
                     {courses.map(course => (
                         <CourseItem 
                             key = {course.id}
-                            title = {course.title}
-                            image = {course.image}
-                            description = {course.description}
-                            studentCount = {course.students_count}
+                            // title = {course.title}
+                            // image = {course.thumbnail_cdn}
+                            // description = {course.description}
+                            // studentsCount = {course.students_count}
+                            course = {course}
                         />
                     ))}
                 </div>
