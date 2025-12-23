@@ -13,9 +13,19 @@
 
     <script type="text/babel">
 
-        function Button({title}) {
+        function Button({title, style}) {
             return (
-                <button>{title}</button>
+                <button style = {style}>{title}</button>
+            )
+        }
+
+        //spread và rest trong props
+        function Input({label, ...inputProps}) {
+            return (
+                <div>
+                    <label>{label}</label>
+                    <input {...inputProps}/>
+                </div>
             )
         }
 
@@ -32,6 +42,19 @@
                         title = {title}
                         //primary = {isPrimary}
                         primary
+                        style = {{ marginBottom: '10px' }}
+                    />
+                    <Input 
+                        label = "your name"
+                        placeholder = "full name"
+                        title = "hello"
+                        // onFocus = {(e) => {
+                        //     e.target.style.borderColor = 'red'
+                        // }}
+                        onFocus = {() => {
+                            console.log(Math.random());
+                            
+                        }}
                     />
                 </div>  
             )
