@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div class="root"></div>
+
+  <script type="text/babel">
+    const orders = [100, 200, 300]
+    const { useState } = React
+
+    function Button2() {
+      const [info, setInfo]= useState({
+        name: 'Nguyen Van A',
+        age: '20',
+        address: 'Dalat, VN'
+      })
+
+      const handleUpdate = () => {
+        setInfo({
+          ...info,
+          bio: 'hay cuoi'
+        })
+      }
+      return (
+        <div className="wrap">
+          <h1>{JSON.stringify(info)}</h1>
+          <button onClick={handleUpdate}>Update</button>  
+        </div>
+      )
+    }
+    
+    function App() {
+      // const [counter, setCounter] = React.useState(1)
+      const [counter, setCounter] = React.useState(() => {
+        const total = orders.reduce((total, curr) => total + curr)
+        console.log(total)
+        return total
+      })
+
+      
+      const handleIncrease = () => {
+        setCounter(counter + 1)
+        // setCounter(prevState => prevState + 1)
+        // setCounter(prevState => prevState + 1)
+        // setCounter(prevState => prevState + 1)
+      }
+
+      return (
+        <div className="wrapper" style={{ padding: '20px' }}>
+          <h1>{counter}</h1>
+          <button onClick={handleIncrease}>Increase</button>
+          <Button2 />
+        </div>
+      )
+    }
+
+    const container = document.querySelector('.root')
+    const root = ReactDOM.createRoot(container)
+    root.render(<App />)
+  </script>
+</body>
+</html>
