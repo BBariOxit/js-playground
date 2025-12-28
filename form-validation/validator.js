@@ -1,26 +1,44 @@
 function Validator(options) {
+    
+    function getParent(element, selector) {
+        while(element.parentElement) {
+            if (element.parentElement.matches(selector)) {
+                return element.parentElement
+            }
+            element = element.parentElement
+        }
+    }
 
     var selectorRules = {}
 
     //hàm thực hiện validate
     function Validate(inputElement, rule) {
-        var errorElement = inputElement.parentElement.querySelector(options.errorSelector)
+        var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector)
         var errorMessage
 
         //lấy ra các rule của selector
         var rules = selectorRules[rule.selector]
         //lặp qua từng rule & kiểm tra
         for (var i =0; i < rules.length; i++) {
-            errorMessage = rules[i](inputElement.value)
+            switch(inputElement.type) {
+                case 'radio':
+                case 'checkbox':
+                    errorMessage = rules[i](
+                        formElement.querySelector(rule.selector + ':checked')
+                    )
+                    break;
+                default:
+                errorMessage = rules[i](inputElement.value)
+            }
             if(errorMessage) break
         }
 
         if (errorMessage) {
             errorElement.innerText = errorMessage
-                inputElement.parentElement.classList.add('invalid')
+                getParent(inputElement, options.formGroupSelector).classList.add('invalid')
             } else {
                 errorElement.innerText = "" 
-                inputElement.parentElement.classList.remove('invalid')
+                getParent(inputElement, options.formGroupSelector).classList.remove('invalid')
             }
 
         return !errorMessage
@@ -50,7 +68,15 @@ function Validator(options) {
                 if (typeof options.onSubmit === 'function') {
                     var enableINputs = formElement.querySelectorAll('[name]')
                     var formValues = Array.from(enableINputs).reduce(function(values, input){
-                        return (values[input.name] = input.value) && values
+                        switch(input.type) {
+                            case 'radio':
+                            case 'checkbox':
+                                values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value
+                                break;
+                            default:
+                                values[input.name] = input.value
+                        }
+                        return values
                     }, {})
 
                     options.onSubmit(formValues)
@@ -70,8 +96,8 @@ function Validator(options) {
                 selectorRules[rule.selector] = [rule.test]
             }
 
-            var inputElement = formElement.querySelector(rule.selector)
-            if (inputElement) {
+            var inputElements = formElement.querySelectorAll(rule.selector)
+            Array.from(inputElements).forEach(function(inputElement) {
                 //xử lý blur khỏi input
                 inputElement.onblur = () => {
                     Validate(inputElement, rule)
@@ -79,11 +105,11 @@ function Validator(options) {
 
                 //xử lý khi người dùng nhập vào input
                 inputElement.oninput = () => {
-                    var errorElement = inputElement.parentElement.querySelector('.form-message')
+                    var errorElement = getParent(inputElement, options.formGroupSelector).querySelector('.form-message')
                     errorElement.innerText = "" 
-                    inputElement.parentElement.classList.remove('invalid')
+                    getParent(inputElement, options.formGroupSelector).classList.remove('invalid')
                 }
-            }
+            })
         });
     }
 }
@@ -96,7 +122,7 @@ Validator.isRequired = function(selector, message) {
     return {
         selector: selector,
         test: (value) => {
-            return value.trim() ? undefined : message || 'vui lòng nhập đủ trường này'
+            return value ? undefined : message || 'vui lòng nhập đủ trường này'
         }
     }
 }

@@ -37,6 +37,22 @@
             <span class="form-message"></span>
           </div>
 
+          <div class="form-group">
+            <label for="password_confirmation" class="form-label">Giới tính</label>
+            <div>
+              <input name="gender" type="radio" value="male" class="form-control">
+              Nam
+            </div>
+            <div>
+              <input name="gender" type="radio" value="female" class="form-control">
+              Nữ
+            </div>
+            <div>
+              <input name="gender" type="radio" value="orther" class="form-control">
+              Khác
+            </div>
+            <span class="form-message"></span>
+          </div>
           <!-- <div class="form-group">
             <label for="avatar" class="form-label">Chọn ảnh đại diện</label>
             <input id="avatar" name="avatar"  type="file" class="form-control">
@@ -84,10 +100,12 @@
         Validator({
             form: '#form-1',
             errorSelector: '.form-message',
+            formGroupSelector: '.form-group',
             rules: [
               Validator.isRequired('#fullname'),  
               Validator.isEmail('#email'),
               Validator.isRequired('#email'),
+              Validator.isRequired('input[name="gender"]'),
               Validator.minLength('#password', 4),
               Validator.isConfirmed('#password_confirmation', function() {
                 return document.querySelector('#form-1 #password').value
