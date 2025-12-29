@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div class="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React
+
+    const gifts = [
+      'CPU i9',
+      'RAM 64GB RGB',
+      'RGB keynorad'
+    ]
+
+    
+    function App() {
+      const [gift, setGift] = useState()
+      
+      const randomGift = () => {
+        const index = Math.floor(Math.random() * gifts.length)
+        setGift(gifts[index])
+      }
+      return (
+        <div style={{ padding: 32 }}>
+          <h1>{gift || 'Chưa có phần thưởng'}</h1>
+          <button onClick={randomGift}>Lấy thưởng</button>
+        </div>
+      )
+    }
+
+    const root = ReactDOM.createRoot(document.querySelector('.root'))
+    root.render(<App />)
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div class="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React
+    const courses = [
+      {
+        id: 1,
+        name: 'HTML, CSS'
+      },
+      {
+        id: 2,
+        name: 'Javascript'
+      },
+      {
+        id: 3,
+        name: 'ReactJS'
+      }
+    ]
+    
+    function Checkbox() {
+      const [checked2, setChecked2] = useState([])
+      console.log(checked2);
+      
+      const handleSubmit3 = () => {
+        //call api
+        console.log({ids: checked2})
+      }
+      const handleCheck = (id) => {
+        setChecked2(prev => {
+          const isChecked = prev.includes(id)
+          if (isChecked) {
+            return prev.filter(item => item !== id)
+          } else {
+            return [...prev, id]
+          }
+        })
+      }
+
+      return (
+        <div style={{ padding: 32 }}>
+          {courses.map(course => (
+            <div key={course.id}>
+              <input 
+                type="checkbox" 
+                checked = {checked2.includes(course.id)}
+                onChange = {() => handleCheck(course.id)}
+              />  
+              {course.name}
+            </div>
+          ))}
+          <button onClick={handleSubmit3}>Register</button>
+        </div>
+      )
+    }
+
+    function Radio() {
+      const [checked, setChecked] = useState(2)
+      console.log(checked);
+      
+      const handleSubmit2 = () => {
+        //call api
+        console.log({id: checked});
+        
+      }
+      return (
+        <div style={{ padding: 32 }}>
+          {courses.map(course => (
+            <div key={course.id}>
+              <input 
+                type="radio" 
+                checked = {checked === course.id}
+                onChange = {()=> setChecked(course.id)}
+              />  
+              {course.name}
+            </div>
+          ))}
+          <button onClick={handleSubmit2}>Register</button>
+        </div>
+      )
+    }
+
+    function App() {
+      const [name, setName] = useState('')
+      const [email, setEmail] = useState('')
+
+      const handleSubmit = () => {
+        console.log({
+          //call api
+          name,
+          email 
+        });
+      }
+      
+      return (
+        //  react js mặc định là one way binding, vue js thì mặc định là two way binding
+        // gõ bên ngoài thì bên trong thay đổi, thay đổi bên trong thì bên ngoài cũng thay đổi(two way binding)
+        <div style={{ padding: 32 }}>
+          <input 
+            value = {name}
+            onChange = {e => setName(e.target.value)}
+          />
+          <button onClick = {() => setName('Nguyen Van Bao')}>Change</button>
+          <div style={{paddingTop: 30}}>
+            <input 
+            value = {email}
+            onChange = {e => setEmail(e.target.value)}
+            />
+            <button onClick={handleSubmit}>Register</button>
+            <Radio />
+            <Checkbox />
+          </div>
+        </div>
+      )
+    }
+
+    const root = ReactDOM.createRoot(document.querySelector('.root'))
+    root.render(<App />)
+  </script>
+</body>
+</html>
