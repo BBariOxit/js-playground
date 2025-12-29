@@ -38,9 +38,9 @@
       }
       const handleCheck = (id) => {
         setChecked2(prev => {
-          const isChecked = checked2.includes(id)
+          const isChecked = prev.includes(id)
           if (isChecked) {
-            return checked2.filter(item => item !== id)
+            return prev.filter(item => item !== id)
           } else {
             return [...prev, id]
           }
