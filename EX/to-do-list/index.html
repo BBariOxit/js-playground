@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+</head>
+<body>
+  <div class="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React
+    function App() {
+
+      const [job, setJob] = useState('')
+      const [jobs, setJobs] = useState(() => {
+        const storageJobs = JSON.parse(localStorage.getItem('jobs'))
+        return storageJobs ?? []
+      })
+
+      const handleSubmit = () => {
+        setJobs(prev => {
+          const newJobs = [...prev, job]
+          const jsonJobs = JSON.stringify(newJobs)
+
+          localStorage.setItem('jobs', jsonJobs)
+          return newJobs
+        })
+        setJob('')
+      }
+      return (
+        <div class="wrap">
+          <input 
+            value = {job}
+            onChange = {(e) => setJob(e.target.value)}
+          />
+          <button onClick={handleSubmit}>Add</button>
+
+          <ul>
+            {jobs.map((job, index) => (
+              <li key={index}>{job}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    const root = ReactDOM.createRoot(document.querySelector('.root'))
+    root.render(<App />)
+  </script>
+</body>
+</html>
