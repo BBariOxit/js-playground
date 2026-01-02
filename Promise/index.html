@@ -55,7 +55,40 @@
       .finally(() => {
         console.log('đã hoàn thành');  //cuối cùng dù thành công hay thất bại thì đều lọt vòa finally
       })
-
+      
+    //VD
+    function sleep(ms) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms)
+      })
+    }
+    sleep(5000) //set 7s là để cái promise của bài trên chạy xong tránh .then bài này ko chạy
+      .then(() => {
+        console.log(1)
+        return sleep(1000) //thằng then tiếp theo phải chờ thằng promise này được giải quyết thì nó mới chạy(ngủ 1s)
+      })
+      .then(() => {
+        console.log(2)
+        return sleep(1000)
+      })
+      .then(() => {
+        console.log(3)
+        return new Promise((resolve, reject) => {  
+          reject()  //nếu giữa đường mà có 1 promise bị reject thì sẽ ko chạy các .then còn lại và lọt vào catch 
+        })
+      })
+      .then(() => {
+        console.log(4)
+        return sleep(1000)
+      })
+      .catch(() => {
+        console.log('lỗi mẹ r');
+        
+      })
+      .finally(() => {
+        console.log('đã hoàn thành');
+        
+      })
   </script>
 </body>
 </html>
