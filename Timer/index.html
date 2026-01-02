@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //setTimeout()
+    //dùng khi mày muốn một đoạn code chạy sau một khoảng thời gian nhất định
+    const timeBom = setTimeout(() => {
+      alert('haha hihi');
+    }, 3000)
+
+
+    //setInterval()
+    //Nó cứ chạy đi chạy lại sau một khoảng thời gian cố định
+
+    const LoopNgon = setInterval(() => {
+      console.log('BUG nè 😘');
+    },5000)
+
+
+    //clearTimeout & clearInterval
+    //đã tạo ra được thì phải biết cách tiêu diệt nó,
+    //không thì nó chạy ngầm nát con mẹ nó RAM của người dùng. 
+    //Để hủy, cần cái "ID" mà hai hàm trên trả về.
+
+    let count = 0
+    const stopMe = setInterval(() => {
+      count ++
+      console.log(`số lần đấm mày: ${count}`)
+
+      if (count == 5) {
+        clearInterval(stopMe)
+        console.log('thôi đấm mày thế là đủ rồi, đau cả tay :))')
+      }
+    }, 2000)
+  </script>
+</body>
+</html>
