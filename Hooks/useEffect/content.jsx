@@ -24,6 +24,7 @@ function Content() { //khi component này render thì code được đọc từ 
   const [type, setType] = useState('posts')
   const [showGoToTop, setShowGoToTop] = useState(false)
   const [width, setWidth] = useState(window.innerWidth)
+  const [countdown, setCountdown] = useState(180)
 
   console.log(type);
   
@@ -77,11 +78,28 @@ function Content() { //khi component này render thì code được đọc từ 
     )
   }, [])
   
+  //setInterval
+  useEffect(() => {
+    let timer = setInterval(() => {
+      setCountdown(prev => prev - 1)  
+      console.log('countdown...')
+    },1000)
+
+    // setTimeout(() => {
+    //   setCountdown(countdown -1 )
+    // })
+
+    return () => clearInterval(timer)
+  }, [/*countdown*/]) // dành cho setTimeout , để mỗi lần countdown thay đổi useEffect sẽ gọi
+  
 
   return (
     <div>
       <div>
-        <h1>chiều dài màn hình: {width}</h1>
+        <h3>chiều dài màn hình: {width}</h3>
+      </div>
+      <div>
+        <h3>{countdown}</h3>
       </div>
 
         {tabs.map((tab) => (
