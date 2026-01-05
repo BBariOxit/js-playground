@@ -12,9 +12,10 @@ function Content() { //khi component này render thì code được đọc từ 
   //-chỉ gọi callback 1 lần sau khi component mounted
   //3. useEffect(callback, [deps])
   //-callback sẽ được gọi lại mỗi khi deps thay đổi
-  //===============================
-  //cả 3 trường hợp trên callbakck luôn đc gọi sau khi component mounted
-  //Cleanup func luôn đc gọi trc khi component unmounted
+  //===========================CHUNG===========================
+  //callbakck luôn đc gọi sau khi component mounted
+  //Cleanup function luôn đc gọi trc khi component unmounted
+  //Cleanup function luôn đc gọi trước khi callback được gọi (trừ lần mounted)
 
 
   const tabs = ['posts', 'comments', 'albums']
@@ -25,8 +26,8 @@ function Content() { //khi component này render thì code được đọc từ 
   const [showGoToTop, setShowGoToTop] = useState(false)
   const [width, setWidth] = useState(window.innerWidth)
   const [countdown, setCountdown] = useState(180)
+  const [count, setCount] = useState(1)
 
-  console.log(type);
   
 
   useEffect(() => {
@@ -82,7 +83,7 @@ function Content() { //khi component này render thì code được đọc từ 
   useEffect(() => {
     let timer = setInterval(() => {
       setCountdown(prev => prev - 1)  
-      console.log('countdown...')
+      // console.log('countdown...')
     },1000)
 
     // setTimeout(() => {
@@ -92,6 +93,13 @@ function Content() { //khi component này render thì code được đọc từ 
     return () => clearInterval(timer)
   }, [/*countdown*/]) // dành cho setTimeout , để mỗi lần countdown thay đổi useEffect sẽ gọi
   
+  //học cleanup func
+  useEffect(() => {
+    console.log(`mounted or re-render ${count}`)
+    return () => {
+      console.log(`Cleanup: ${count}`)
+    }
+  }, [count])
 
   return (
     <div>
@@ -101,19 +109,26 @@ function Content() { //khi component này render thì code được đọc từ 
       <div>
         <h3>{countdown}</h3>
       </div>
+      <div style={{ display: 'flex', marginBottom: '30px', alignItems: 'center' }}>
+        <button 
+          style={{ width: '80px', height: '25px', alignItems: 'center'}}
+          onClick = {() => setCount(count + 1)}
+        >Click me!</button>
+        <h1 style={{ paddingLeft: '20px', margin: '0px' }}>{count}</h1>
+      </div>
 
-        {tabs.map((tab) => (
-          <button 
-            key={tab}
-            style={type === tab ? {
-              color: '#fff',
-              backgroundColor: "#333",
-            } : {} }
-            onClick={() => setType(tab)}
-          >
-            {tab}
-          </button>
-        ))}
+      {tabs.map((tab) => (  
+        <button 
+          key={tab}
+          style={type === tab ? {
+            color: '#fff',
+            backgroundColor: "#333",
+          } : {} }
+          onClick={() => setType(tab)}
+        >
+          {tab}
+        </button>
+      ))}
 
       <input
         value={title}
