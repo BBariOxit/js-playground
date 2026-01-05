@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    // hoisting là gì:
+    // đưa phần khai báo lên trên đầu phạm vi
+
+
+    var age // vì được hoisting lên mà ko gán giá trị cho nó nên nó là undifined
+    console.log(age)
+    // console.log(name)  //error name is not defined
+    age = 18  // var có tính chất hoisting nó đưa phần khai báo biến là var age lên đầu
+    
+    console.log(age) // đã được gán age = 18 ở dòng 18
+    
+
+    //hoisting with function declaration
+
+    console.log(sum(6,7))
+    function sum(a,b) {  //cả cái cụm hàm này chính là phần khai báo => đưa lên đầu => sử dụng đc hàm sum() trước khi khai báo
+      return a + b
+    }
+
+    //hoisting with let, const
+
+    {
+      console.log(fullName) //error: can not access 'fullName before initialization'
+      let fullName = 'PTB'
+      // khai báo biến với let, const khi được hoisted ko đc tạo giá trí
+      // và được đưa vào 'temporal dead zone'
+      // => có nghĩa là nó vẫn được hoisted lên nhưng ko mang giá trị gì(ko như var được gắn undifined)
+      // => đưa vào vùng ko sử dụng đc
+    }
+    
+    //VD
+    const counter1 = makeCounter()
+    console.log(counter1()) // output = ? output = 1
+    
+    function makeCounter() {
+      // nó sẽ đưa cái hàm increase lên đây
+      let counter = 0
+
+      return increase
+
+      function increase() {  //sẽ được hoisting lên đầu phạm vi
+        return ++counter
+      }
+    }
+
+    //VD 
+    var tip = 100
+    (function () {
+      console.log("I have $" + husband()) 
+      function wife() {
+        return tip * 2;
+      }
+      function husband() {
+        return wife() / 2;
+      }
+      var tip = 10  //nó kiếm thằng gần nhất trong phạm vi nó trc rồi mới kiếm bên ngoài
+    })() //IIFE
+    // Output: NaN
+
+      //luồng chạy thực tế như này
+
+      // (function () {
+      //   var tip // Hoisting nè, lúc này tip = undefined
+      //   function wife() {
+      //     return tip * 2 // undefined * 2 = NaN
+      //   }
+      //   function husband() {
+      //     return wife() / 2 // NaN / 2 = NaN
+      //   }
+      //   console.log("I have $" + husband()); // In ra "I have $NaN"
+      //   tip = 10 // Giờ mới gán bằng 10 thì muộn mẹ rồi!
+      // })()
+  </script>
+</body>
+</html>
