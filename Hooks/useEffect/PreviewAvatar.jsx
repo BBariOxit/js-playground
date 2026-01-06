@@ -15,6 +15,8 @@ function PreviewAvatar() {
     
     file.preview = URL.createObjectURL(file)
     setAvatar(file)
+
+    e.target.value = null
   }
   
   return (

@@ -20,6 +20,19 @@ const lessons = [
 ]
 function Chat() {
   const [lessonId, setLessonId] = useState(1)
+
+  useEffect(() => {
+    const handleComment = ({ detail }) => {
+      console.log(detail)
+    }
+    window.addEventListener(`lesson-${lessonId}`, handleComment)
+
+    //cleaup func
+    return () => {
+      window.removeEventListener(`lesson-${lessonId}`, handleComment)
+    }
+  }, [lessonId])
+
   return (
     <div>
       <ul>
