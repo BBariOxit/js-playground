@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div class="root"></div>
+  <script type="text/babel">
+
+    //useRef
+    //dùng để lưu các giá trị qua một tham chiếu bên ngoài function component
+
+    //Lifecycle trước khi xài h1Ref
+    //useState(60): Tạo vùng nhớ cho count, giá trị là 60.
+    //useRef(): Tạo hai cái "két sắt" timerId và prevCount, cả hai lúc này là undefined.
+    //Nó chạy cái dòng console.log(count, prevCount.current). Kết quả: 60, undefined.
+    //React vẽ cái giao diện (UI) với số 60 to đùng.
+    //Sau khi cái màn hình hiện ra số 60, useEffect mới thò mặt ra.
+    //Nó thực hiện: prevCount.current = 60.
+
+    //bấm Start và setInterval chạy: Cái hàm setCount(prev => prev - 1) được gọi.
+    //React nhận lệnh: có thằng đòi đổi count thành 59 kìa, chuẩn bị vẽ lại (Re-render) đi.
+    //render lại: React gọi lại cái function App()
+    //const [count] = useState lúc này trả về giá trị mới là 59.
+    //useRef vẫn trả về cái "két sắt" cũ, và lúc này prevCount.current vẫn đang là 60. Tại sao? Vì đã có thằng nào đụng vào nó đâu
+    //Dòng console.log(count, prevCount.current) chạy ngay lúc này. * => Kết quả in ra: 59, 60.
+    //Browser Paint (Vẽ lên màn hình): React nhìn vào đống JSX mày trả về, thấy số 59 
+    //-> Nó cập nhật cái DOM thật. Người dùng nhìn thấy số 59 trên màn hình.
+    //Commit Phase (Chạy useEffect): Sau khi cái màn hình đã hiện số 59 xong xuôi, React mới rảnh tay đi kiểm tra useEffect.
+    //Nó thấy: À, cái count từ 60 nhảy xuống 59 rồi, chạy cái hàm bên trong thôi.
+    //Lệnh prevCount.current = count (tức là gán 59 vào két) được thực thi.
+    //Bây giờ prevCount.current mới chính thức là 59. 
+    //Nhưng khổ nỗi, lúc này cái console.log(đoạn 59, 60) nó chạy xong mẹ nó từ đời nào rồi
+    //=> nên mới thấy 59, 60 ở console
+
+    const { useState, useRef, useEffect } = React
+    function App() {
+      const [count, setCount] = useState(60)
+
+      const timerId = useRef()
+      const prevCount = useRef()
+      const h1Ref = useRef()
+
+      useEffect(() => {
+        prevCount.current = count
+      }, [count])
+
+      useEffect(() => {
+        console.log(h1Ref.current) //giống như querrySellector vậy á
+        const rect = h1Ref.current.getBoundingClientRect() // lấy tọa độ (code thuần)
+        console.log(rect)
+      })
+
+      const handleStart = () => {
+        // nếu đang chạy rồi thì cút, đừng có tạo thêm!
+        if (timerId.current) return
+
+        timerId.current = setInterval(() => {
+          setCount(prev => prev -1)
+        }, 1000)
+
+        console.log('start -> ', timerId.current )
+      }
+      const handleStop = () => {
+        clearInterval(timerId.current)
+
+        console.log('stop -> ', timerId.current)
+      }
+
+      console.log(count, prevCount.current)
+      
+      return (
+        <div className="wrapper" style={{padding: 20}}>
+          <h1 ref={h1Ref}>{count}</h1>
+          <button onClick = {handleStart}>Start</button>
+          <button onClick = {handleStop}>Stop</button>
+        </div>
+      )
+    }
+
+    const root = ReactDOM.createRoot(document.querySelector('.root'))
+    root.render(<App />)
+
+  </script>
+</body>
+</html>
