@@ -1,6 +1,7 @@
 const { useState, useCallback } = React
 
 // useCallback sinh ra để tránh tạo ra hàm mới ko cần thiết trong func compnt
+// chỉ sử dụng useCallback Khi Component con đã được bọc trong React.memo (thường dùng nhất với truyền function xuống)
 function App() {
   const [count, setCount] = useState(0)
 
@@ -17,18 +18,18 @@ function App() {
   // => xài useCallback để khắc phục
 
   //hàm handleIncrease cũ
-  const handleIncrease = () => {
-    setCount(prev => prev + 1)
-  }
+  // const handleIncrease = () => {
+  //   setCount(prev => prev + 1)
+  // }
 
 
   // khi app đc mounted -> useCallback nhận đc cái callback của nó 
   // -> tạo hàm , nhận lại tham chiếu và lưu ra ngoài phạm vi hàm App(tự nó lưu)
   // nó return cái tham chiếu đó cho biến handleIncrease
-  // khi ấn click me , nếu mà deps trống thì nó sẽ trả lại tham chiếu trước đó thay vì tạo ra hàm mới
-  // const handleIncrease = useCallback(() => {  //useCallback(callback, [deps]), cái deps tương tự như useEffect
-  //   setCount(prev => prev + 1)
-  // }, [])
+  // khi ấn click me , App re render, nếu mà deps trống thì nó sẽ trả lại tham chiếu trước đó thay vì tạo ra hàm mới
+  const handleIncrease = useCallback(() => {  //useCallback(callback, [deps]), cái deps tương tự như useEffect
+    setCount(prev => prev + 1)
+  }, [])
   return (
     <div className="wapper" style={{padding: 20}}>
       {/* bởi vì <Content /> là con, nên mỗi khi render lại component cha thì component con cũng re-render */}
