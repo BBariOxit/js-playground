@@ -1,0 +1,79 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div class="root"></div>
+    <script type="text/babel">
+      const { useState, useMemo, useRef } = React
+      
+      function App() {
+        const [name, setName] = useState('')
+        const [price, setPrice] = useState('')
+        const [products, setProducts] = useState([])
+
+        const nameRef = useRef()
+
+        const handleSubmit = () => {
+          setProducts([...products, {
+            name,
+            price: +price
+          }])
+          setName('')
+          setPrice('')
+          nameRef.current.focus()
+        }
+
+        // không tối ưu, nó bị tính lại mỗi lần render
+        // const total = products.reduce((result, prod) => {
+        //   console.log('tinh toan lai ....') //nó bị tính toán lại ko cần thiết
+        //   return result + prod.price
+        // }, 0)
+
+        //khắc phục với useMemo  useMemo(callback, [deps]), chỉ tính toán 1 lần
+        const total = useMemo(() => {
+            const result = products.reduce((result, prod) => {
+              console.log('tinh toan lai ....')
+              return result + prod.price
+          }, 0)
+          return result
+        }, [products])
+
+        return (
+          <div className ="wrapper" style={{padding: '10px 32px'}}>
+            <input
+              ref={nameRef}
+              value = {name}
+              placeholder = 'Enter name...'
+              onChange = {(e) => setName(e.target.value)}
+            />
+            <br/>
+            <input
+              value = {price}
+              placeholder = 'Enter price...'
+              onChange = {(e) => setPrice(e.target.value)}
+            />
+            <br/>
+            <button onClick = {handleSubmit}>Add</button>
+            <br/>
+            total: {total}  
+            <ul>
+              {products.map((product, index)=> {
+                return <li key={index}>{product.name} - {product.price}</li>
+              })}  
+            </ul>
+          </div>
+        )
+      }
+
+      const root = ReactDOM.createRoot(document.querySelector('.root'))
+      root.render(<App />)
+    </script>
+  </body>
+  </html>
