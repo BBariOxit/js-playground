@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button class="btn" onclick="console.log(this)">Click me!</button>
+  <!--khi viết dưới dạng attribute , đến lúc thực thi nó gom cái đoạn code nằm trong attribute thành một cái func(giống như hàm ở dòng 49) -->
+  <script>
+    //từ khóa this đề cập đến đối tượng mà nó thuộc về
+    //đặc tính
+    //Trong một phương thức, this tham chiếu tới đối tượng truy cập phương thức (đối tượng trước dấu .)
+    console.log(this) //Đứng ngoài phương thức, this tham chiếu tới đối tượng global
+
+    const iPhone7 = {
+      //thuộc tinh - property
+      name: 'iPhone 7',
+      color: 'Pink',
+      weight: 300,
+
+      //phương thức - method
+      takePhoto() {
+        console.log(this) //this ở đây nó trả về chính đối tượng mà nó đang thuộc về
+      },
+      objChild: {
+        name: 'obj-Child',
+        methodChild() {
+          console.log(this ) //this ở đây chính là objChild
+        }
+      }
+    }
+
+    // console.log(iPhone7.takePhoto())
+    iPhone7.objChild.methodChild()
+
+    //VD
+    //obj constructor
+    function Car(name, color, weight) {
+      this.name = name
+      this.color = color
+      this.weight = weight
+      this.run = () => {
+        console.log('running: ', this)
+      }
+    }
+    Car.prototype.stop = function() {
+      console.log('stop')
+    }
+    const tBMWV4 = new Car('BMWV4', 'black', '5000')
+    console.log(tBMWV4.run())
+
+    //vd
+    const btn = document.querySelector('.btn')
+    btn.onclick = function() { //Arrow function không có this riêng(nó ko có context), nó mượn this của ngữ cảnh bên ngoài.
+      // console.log(this)
+      // console.dir(this)
+      // console.dir(this.innerText)
+    }   
+
+    //
+    function myFunc() {
+      console.log(this)
+    }
+    myFunc() //myFunc là 1 hàm bhtg, khi gọi thì ko có obj nào đứng trc => this chính là obj window
+
+    //this trong một hàm là undefined khi ở strict mode.
+    function myFunc2() {
+      'use strict'
+      console.log(this)
+    }
+    myFunc2()
+
+    //this trong hàm tạo là đại diện cho đối tượng sẽ được tạo.
+    const porsche = new Car('Posrche', 'yellow')
+    const mescerdesS450 = new Car('Mescerdes-S450', 'black')
+    console.log(porsche.name)
+    console.log(mescerdesS450.name)
+
+    //
+    Car.prototype.push = function() {
+      //context , bất cứ 1 func nào đều có cái context của nó
+      function test() {
+        console.log(this) //this trong hàm => window
+      }
+      test()
+    }
+    porsche.push()
+
+    //Các phương thức bind(), call(), apply() có thể tham chiếu this tới đối tượng khác.
+  </script>
+</body>
+</html>
