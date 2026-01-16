@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const teacher = {
+      firstName: 'Minh',
+      lastName: 'Thu'
+    }
+    function greet(greeting, message) {
+      return `${greeting} ${this.firstName} ${this.lastName} ${message}`
+    }
+    //với apply
+    // thằng call làm được gì thì thằng apply cũng làm được điều tương tự 
+    const result = greet.apply(teacher, ['em chào cô', 'cô dạy môn gì thế ạ']) //truyền đối số bằng arr
+    console.log(result)
+    //ss với call
+    const result2 = greet.call(teacher, 'em chào cô', 'cô dạy môn gì thế ạ')
+    console.log(result2)
+
+    //function borrowing
+    const teacher2 = {
+      firstName: 'Minh',
+      lastName: 'Thảo',
+      isOnline: false,
+      goOnline() {
+        this.isOnline = true
+        console.log(`${this.firstName} ${this.lastName} is Online`)
+      },
+      goOffline() {
+        this.isOffline = false
+        console.log(`${this.firstName} ${this.lastName} is Offline`)
+      }
+    }
+    const me = {
+      firstName: 'Phan',
+      lastName: 'Bảo',
+      isOnline: false
+    }
+
+    console.log('Teacher: ', teacher2.isOnline) //false
+    teacher2.goOnline() // cô đã online
+    console.log('Teacher: ', teacher2.isOnline) //true
+    console.log('----------------')
+    console.log('Teacher: ', me.isOnline) //false
+    teacher2.goOnline.apply(me) // mượn hàm goOnline của cô để dùng
+    console.log('Teacher: ', me.isOnline) //true
+
+
+    //extends
+    function Animal(name, weight) {
+      this.name = name
+      this.weight =weight
+    }
+    function Parrot() {
+      Animal.apply(this, arguments) 
+      //arguments tính chất tương tự mảng, mà thằng apply truyền đối số dưới dạng mảng => nên truyền arguments là nó chạy luôn
+      this.speak = () => {
+        console.log('nhà có khách')
+      }
+    }
+    const conVet = new Parrot('chó', 300)
+    console.log(conVet)
+    conVet.speak()
+
+
+
+    //============== so sánh 3 thằng bind-call-apply ==================
+    console.log('============== so sánh 3 thằng bind-call-apply ==================')
+    //giống nhau:
+    //là các method được kế thừa từ function prototype
+    function fn(){}
+    console.log(fn.bind === Function.prototype.bind) //true
+    console.log(fn.call === Function.prototype.call) //true
+    console.log(fn.apply === Function.prototype.apply) //true
+
+    //khác nhau:
+    /**
+     * Bind method
+     * - Trả ra hàm mới với `this` tham chiếu tới `thisArg`
+     * - Không thực hiện gọi hàm
+     * - Nếu được bind kèm `arg1, arg2, ...` thì các đối số này sẽ được ưu tiên hơn
+       VD: const newFn = fn.bind(thisArg, arg1, arg2, ...)
+           newFn(arg1, arg2, ...)
+     */
+
+     /**
+     * Call method
+     * - Thực hiện bind `this` với `thisArg` và thực hiện gọi hàm
+     * - Nhận các đối số cho hàm gốc từ `arg1, arg2, ...`
+       VD: fn.call(thisArg, arg1, arg2, ...)
+     */
+
+     /**
+     * Apply method
+     * - Thực hiện bind `this` với `thisArg` và thực hiện gọi hàm
+     * - Nhận các đối số cho hàm gốc bằng đối số thứ 2 dưới dạng mảng `[arg1, arg2, ...]`
+       VD: fn.apply(thisArg, [arg1, arg2, ...])
+     */
+  </script>
+</body>
+</html>
