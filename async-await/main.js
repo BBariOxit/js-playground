@@ -16,12 +16,19 @@
 // khi gắn async vào trước một cái hàm (function).
 // Ý nghĩa: Ê chúng mày, trong cái hàm này sẽ có những việc tốn thời gian, tao báo trước để chúng mày biết.
 // Luật bất thành văn: Muốn dùng await thì bắt buộc phải nằm trong hàm async
+// Một hàm có từ khóa async LUÔN LUÔN trả về một PROMISE. Kể cả khi mày return một giá trị thường,
+// JS sẽ tự động bọc (wrap) nó vào một cái Promise.resolve().
+
+async function laySo() {
+  return 69
+}
+const kq = laySo()
+console.log(kq)
 
 //AWAIT
 // Mày đặt await trước một hành động tốn thời gian (ví dụ: client.connect()).
 // Ý nghĩa: Đứng im tại dòng này! Đợi bố mày kết nối xong xuôi,
 // uống miếng nước đã rồi mới được chạy xuống dòng dưới.
-// Bất kể mày viết cái gì trong hàm async, thì kết quả trả về của nó LUÔN LUÔN là một Promise.
 
 // khi ko dùng async/await
 function diMuaCaffe() {
@@ -68,12 +75,14 @@ const diTanGai = async () => {
   console.log('=============== tán gái ================')
   console.log('1. bắt đầu nhắn tin cho em :))')
   try {
-    //dừng ở đây 5s cho đến khi nó trả về kq
+    // dừng ở đây 5s cho đến khi nó trả về kq
     const emIu = await layThongTinGai()
-    //dòng này chỉ chay khi dòng trên chạy xong
+    // dòng này chỉ chay khi dòng trên chạy xong
     console.log(`2. xin chào em ${emIu.ten} có số đo ${emIu.soDo}`)
   } catch(err) {
-    //nếu promise bị reject, nó nhảy vào đây
+    // nếu promise bị reject, nó nhảy vào đây
+    // Nếu Promise đó Rejected: Thằng await sẽ nhìn thấy cái reject, nó tự động ném (throw) cái lỗi đó ra ngay lập tức.
+    // Mà trong JavaScript, cái gì "throw" (ném lỗi) thì thằng try...catch nó sẽ hứng
     console.log('lỗi rồi')
   }
   //dù thành công hay thất bại đều chạy dòng này
@@ -83,3 +92,18 @@ const diTanGai = async () => {
 setTimeout(diTanGai, 7000)
 // setTimeout(() => console.log('4. t chạy trước trong lúc chờ thằng lia await'), 10000)
 console.log('4. t chạy trước trong lúc chờ thằng kia await')
+
+//ví dụn mì tôm
+const nauMiTom = () => {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res('Tô mì tôm trứng hồng đào, chúc chích, full toping')
+    }, 2000)
+  })
+}
+const anDem = async () => {
+  console.log('đói bụng vãi, may còn gói mì tôm, nấu thôi')
+  const monAn = await nauMiTom()
+  console.log(`bắt đầu ăn ${monAn}, tuyệt với :D`)
+}
+setTimeout(anDem, 11000)
