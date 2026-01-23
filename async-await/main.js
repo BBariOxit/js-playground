@@ -31,7 +31,6 @@ console.log(kq) // Nó in ra: Promise { <fulfilled>: 69 }
 // Ý nghĩa: Đứng im tại dòng này! Đợi bố mày kết nối xong xuôi,
 // uống miếng nước đã rồi mới được chạy xuống dòng dưới.
 
-
 // cơ chế hoạt động của await(deep)
 // Javascript là Single Threaded (đơn luồng) - nó chỉ có 1 thằng công nhân làm việc.
 // Vậy tại sao await dừng lại chờ mà app không bị treo?
@@ -58,15 +57,41 @@ async function viDu() {
 async function test() {
     console.log("1")
     await delay(1000)
-    
 }
 //nhưng thực chất
 function test() {
   console.log("1")
+  // Gặp await -> Trả về Promise và nhét phần sau vào .then()
   return delay(1000).then(() => {
     console.log("2")
   })
-}
+} //await chính là điểm ngắt để nhét toàn bộ code phía sau vào trong cái .then() vô hình
+// hiểu về event loop sẽ dễ hiểu hơn -> folder event loop(quên thì nhớ vào đây :))
+
+//THÊM SIU HAY
+// Tại sao layDataTuServer() (hay bất cứ cái hàm gọi API nào như fetch, axios.get)
+// nó ko trả về dữ liệu luôn mà lại ném về cái Promise?
+// => Câu trả lời nằm ở 2 chữ: THỜI GIAN và ĐƠN LUỒNG (Single Thread).
+// 1. Sự chênh lệch tốc độ
+// CPU: Nó xử lý một dòng code mất vài nano giây. nhanh như flash.
+// Mạng (Server): Gửi yêu cầu đi, chờ server làm việc, rồi gửi về. Nhanh thì 50ms, chậm thì vài giây. Với CPU, đây là cả một thế kỷ.
+// => Nếu mày bắt thằng CPU (The Flash) đứng chờ thằng Server (Con rùa) trả data về rồi mới được chạy dòng tiếp theo,
+// thì đó là một sự lãng phí tài nguyên khủng khiếp.
+// 2. Nếu layDataTuServer() KHÔNG PHẢI là Promise (Chạy Đồng Bộ)
+function bamNut() {
+    console.log("Bắt đầu tải...")
+    // Giả sử hàm này dừng chương trình lại chờ 5s để lấy data
+    const data = layDataTuServer_DongBo()
+    // Trong 5s này:
+    // 1. Màn hình đơ, ko cuộn được, ko bấm được gì.
+    // 2. Vòng tròn loading đứng im.
+    // 3. User tưởng web sập, chửi web lag, và tắt tab.
+    console.log("Xong!") //=> ngu :))
+} 
+// Vì JS chỉ có 1 luồng (Single Thread), nếu mày chặn (block) nó để chờ server,
+// -> toàn bộ trình duyệt sẽ bị TREO. Đây là điều cấm kỵ.
+
+//EXAMPLE
 // khi ko dùng async/await
 function diMuaCaffe() {
   console.log('bắt đầu đi mua')
