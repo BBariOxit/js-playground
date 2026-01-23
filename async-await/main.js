@@ -18,18 +18,55 @@
 // Luật bất thành văn: Muốn dùng await thì bắt buộc phải nằm trong hàm async
 // Một hàm có từ khóa async LUÔN LUÔN trả về một PROMISE. Kể cả khi mày return một giá trị thường,
 // JS sẽ tự động bọc (wrap) nó vào một cái Promise.resolve().
+// Bản chất: async function = new Promise(...).
 
 async function laySo() {
   return 69
 }
 const kq = laySo()
-console.log(kq)
+console.log(kq) // Nó in ra: Promise { <fulfilled>: 69 }
 
 //AWAIT
 // Mày đặt await trước một hành động tốn thời gian (ví dụ: client.connect()).
 // Ý nghĩa: Đứng im tại dòng này! Đợi bố mày kết nối xong xuôi,
 // uống miếng nước đã rồi mới được chạy xuống dòng dưới.
 
+
+// cơ chế hoạt động của await(deep)
+// Javascript là Single Threaded (đơn luồng) - nó chỉ có 1 thằng công nhân làm việc.
+// Vậy tại sao await dừng lại chờ mà app không bị treo?
+// Bí mật nằm ở chỗ: await không chặn (block) toàn bộ chương trình, nó chỉ chia cái hàm async ra làm hai.
+async function viDu() {
+  console.log('======== cơ chế await ========')
+  console.log('A: Chạy ngay lập tức') // Phần 1
+  await layDataTuServer() // điểm cắt
+  // bất kỳ hàm gọi API nào như fetch, axios.get nó đều trả về promise
+  console.log("B: Chạy sau khi có data") // phần 2
+}
+// Chạy Phần 1: JS chạy code đồng bộ từ trên xuống in ra A.
+// Gặp await -> Nó gọi hàm layDataTuServer() -> Nó thấy đây là Promise
+// -> QUAN TRỌNG: Nó TẠM DỪNG việc thực thi hàm viDu lại ngay tại dòng này.
+// Nó ném toàn bộ phần code phía sau (Phần 2: console.log("B")) vào một cái hàng đợi đặc biệt gọi là Microtask Queue(event loop)
+// Thoát ra ngoài: Thằng JS (Main Thread) nhảy ra khỏi hàm viDu, 
+// -> đi làm việc khác ở bên ngoài (ví dụ render giao diện, xử lý click chuột...). Nhờ thế app ko bị đơ.
+// Quay lại: Khi cái Promise layDataTuServer chạy xong (Resolve), thằng JS sẽ quay lại,
+// -> lôi cái Phần 2 từ trong hàng đợi ra và chạy tiếp.
+
+//THÊM
+// async-await nó chỉ là cách viết khác của Promise Chains (.then()) kết hợp với Generators.
+// khi viết bthg
+async function test() {
+    console.log("1")
+    await delay(1000)
+    
+}
+//nhưng thực chất
+function test() {
+  console.log("1")
+  return delay(1000).then(() => {
+    console.log("2")
+  })
+}
 // khi ko dùng async/await
 function diMuaCaffe() {
   console.log('bắt đầu đi mua')
